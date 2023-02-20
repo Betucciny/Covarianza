@@ -3,7 +3,7 @@ import numpy as np
 
 def coef():
     m = np.array([[1, 2, 3, 4],
-                  [2, 1, 4, 3]])
+                  [2, 1, 4, 3]], dtype=float)
     return m
 
 
@@ -33,11 +33,22 @@ def transpuesta_nocuadrada(matriz):
     return m
 
 
+def matrixmult(m1, m2):
+    m = []
+    for i in range(len(m1)):
+        m.append([])
+        for j in range(len(m2[i])):
+            m[i].append(0)
+            for k in range(len(m2)):
+                m[i][j] += m1[i][k] * m2[k][j]
+    return m
+
+
 def main():
     mat = coef()
     media = mean(mat)
     center = mat - media
-    resul = np.dot(center, transpuesta_nocuadrada(center))
+    resul = matrixmult(center, transpuesta_nocuadrada(center))
     imprimir(resul)
 
 
