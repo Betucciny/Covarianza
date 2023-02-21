@@ -1,4 +1,13 @@
 import numpy as np
+from sklearn import datasets
+
+
+def covarianza(mat):
+    media = mean(mat)
+    center = mat - media
+    resul = mult2(center)
+    cov = resul / (len(mat[0]))
+    return cov
 
 
 def coef():
@@ -21,7 +30,7 @@ def mean(matriz):
         for j in range(len(matriz[i])):
             suma += matriz[i][j]
         m.append([suma/len(matriz[i])])
-    return m
+    return np.array(m)
 
 
 def transpuesta_nocuadrada(matriz):
@@ -30,7 +39,7 @@ def transpuesta_nocuadrada(matriz):
         m.append([])
         for j in range(len(matriz)):
             m[i].append(matriz[j][i])
-    return m
+    return np.array(m)
 
 
 def matrixmult(m1, m2):
@@ -41,14 +50,31 @@ def matrixmult(m1, m2):
             m[i].append(0)
             for k in range(len(m2)):
                 m[i][j] += m1[i][k] * m2[k][j]
+    return np.array(m)
+
+
+def vectormult(vector):
+    m = []
+    for i in range(len(vector)):
+        m.append([])
+        for j in range(len(vector)):
+            m[i].append(vector[i] * vector[j])
+    return np.array(m)
+
+
+def mult2(mat: np.ndarray):
+    m = np.zeros((len(mat), len(mat)))
+    for i in range(len(mat[0])):
+        m = m + vectormult(mat[:, i].T)
     return m
 
 
 def main():
-    mat = coef()
-    media = mean(mat)
-    center = mat - media
-    resul = matrixmult(center, transpuesta_nocuadrada(center))
+    iris = datasets.load_iris()
+    x = iris.data
+    y = iris.target
+    mat = np.concatenate((x, y[:, None]), axis=1).T
+    resul = covarianza(mat)
     imprimir(resul)
 
 
